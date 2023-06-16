@@ -1,0 +1,946 @@
+{
+  "dependencies": {
+    "http": "http:"
+  },
+  "schema": {
+    "types": [
+      {
+        "name": "Root",
+        "actions": [
+          {
+            "name": "configure",
+            "type": "Void",
+            "params": [
+              {
+                "name": "faction",
+                "type": "String"
+              },
+              {
+                "name": "symbol",
+                "type": "String"
+              },
+              {
+                "name": "token",
+                "type": "String"
+              }
+            ]
+          }
+        ],
+        "events": [],
+        "fields": [
+          {
+            "name": "factions",
+            "type": "FactionCollection"
+          },
+          {
+            "name": "agent",
+            "type": "Agent"
+          },
+          {
+            "name": "serverStatus",
+            "type": "ServerStatus"
+          },
+          {
+            "name": "contracts",
+            "type": "ContractCollection"
+          },
+          {
+            "name": "ships",
+            "type": "ShipCollection"
+          },
+          {
+            "name": "systems",
+            "type": "SystemCollection"
+          },
+          {
+            "name": "events",
+            "type": "String"
+          },
+          {
+            "name": "status",
+            "type": "String"
+          },
+          {
+            "name": "parse",
+            "type": "List",
+            "ofType": {
+              "type": "Ref",
+              "ofType": "Waypoint"
+            },
+            "hints": {
+              "hidden": true
+            },
+            "params": [
+              {
+                "name": "name",
+                "type": "String"
+              },
+              {
+                "name": "value",
+                "type": "String"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Faction",
+        "fields": [
+          {
+            "name": "name",
+            "type": "String"
+          },
+          {
+            "name": "symbol",
+            "type": "String"
+          },
+          {
+            "name": "description",
+            "type": "String"
+          },
+          {
+            "name": "headquarters",
+            "type": "String"
+          },
+          {
+            "name": "isRecruiting",
+            "type": "Boolean"
+          }
+        ]
+      },
+      {
+        "name": "FactionPage",
+        "fields": [
+          {
+            "name": "items",
+            "type": "List",
+            "ofType": "Faction"
+          },
+          {
+            "name": "next",
+            "type": "Ref",
+            "ofType": "FactionPage"
+          }
+        ]
+      },
+      {
+        "name": "FactionCollection",
+        "fields": [
+          {
+            "name": "one",
+            "type": "Faction",
+            "params": [
+              {
+                "name": "symbol",
+                "type": "String"
+              }
+            ]
+          },
+          {
+            "name": "page",
+            "type": "FactionPage",
+            "params": [
+              {
+                "name": "page",
+                "type": "Int"
+              },
+              {
+                "name": "limit",
+                "type": "Int"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Agent",
+        "fields": [
+          {
+            "name": "accountId",
+            "type": "String"
+          },
+          {
+            "name": "symbol",
+            "type": "String"
+          },
+          {
+            "name": "headquarters",
+            "type": "String"
+          },
+          {
+            "name": "credits",
+            "type": "Int"
+          },
+          {
+            "name": "startingFaction",
+            "type": "String"
+          }
+        ]
+      },
+      {
+        "name": "ServerStatus",
+        "fields": [
+          {
+            "name": "status",
+            "type": "String"
+          },
+          {
+            "name": "version",
+            "type": "String"
+          },
+          {
+            "name": "resetDate",
+            "type": "String"
+          },
+          {
+            "name": "description",
+            "type": "String"
+          },
+          {
+            "name": "stats",
+            "type": "String"
+          },
+          {
+            "name": "leaderboards",
+            "type": "String"
+          },
+          {
+            "name": "serverResets",
+            "type": "String"
+          },
+          {
+            "name": "announcements",
+            "type": "String"
+          },
+          {
+            "name": "links",
+            "type": "String"
+          }
+        ]
+      },
+      {
+        "name": "Contract",
+        "fields": [
+          {
+            "name": "id",
+            "type": "String"
+          },
+          {
+            "name": "factionSymbol",
+            "type": "String",
+            "hints": {
+              "primary": true
+            }
+          },
+          {
+            "name": "type",
+            "type": "String",
+            "hints": {
+              "primary": true
+            }
+          },
+          {
+            "name": "terms",
+            "type": "String",
+            "hints": {
+              "primary": true
+            }
+          },
+          {
+            "name": "accepted",
+            "type": "Boolean"
+          },
+          {
+            "name": "fullfilled",
+            "type": "Boolean"
+          },
+          {
+            "name": "expiration",
+            "type": "String"
+          },
+          {
+            "name": "deadlineToAccept",
+            "type": "String"
+          }
+        ],
+        "actions": [
+          {
+            "name": "accept",
+            "type": "String"
+          },
+          {
+            "name": "deliver",
+            "type": "String",
+            "params": [
+              {
+                "name": "shipSymbol",
+                "type": "String"
+              },
+              {
+                "name": "tradeSymbol",
+                "type": "String"
+              },
+              {
+                "name": "units",
+                "type": "Int"
+              },
+              {
+                "name": "ship",
+                "type": "Ref",
+                "ofType": "Ship"
+              }
+            ]
+          },
+          {
+            "name": "fulfill",
+            "type": "String"
+          }
+        ]
+      },
+      {
+        "name": "ContractPage",
+        "fields": [
+          {
+            "name": "items",
+            "type": "List",
+            "ofType": "Contract"
+          },
+          {
+            "name": "next",
+            "type": "Ref",
+            "ofType": "ContractPage"
+          }
+        ]
+      },
+      {
+        "name": "ContractCollection",
+        "fields": [
+          {
+            "name": "one",
+            "type": "Contract",
+            "params": [
+              {
+                "name": "id",
+                "type": "String"
+              }
+            ]
+          },
+          {
+            "name": "page",
+            "type": "ContractPage",
+            "params": [
+              {
+                "name": "page",
+                "type": "Int"
+              },
+              {
+                "name": "limit",
+                "type": "Int"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Ship",
+        "fields": [
+          {
+            "name": "symbol",
+            "type": "String"
+          },
+          {
+            "name": "status",
+            "type": "String"
+          },
+          {
+            "name": "registration",
+            "type": "String"
+          },
+          {
+            "name": "nav",
+            "type": "String"
+          },
+          {
+            "name": "crew",
+            "type": "String"
+          },
+          {
+            "name": "frame",
+            "type": "String"
+          },
+          {
+            "name": "reactor",
+            "type": "String"
+          },
+          {
+            "name": "engine",
+            "type": "String"
+          },
+          {
+            "name": "modules",
+            "type": "String"
+          },
+          {
+            "name": "mounts",
+            "type": "String"
+          },
+          {
+            "name": "fuel",
+            "type": "String"
+          },
+          {
+            "name": "cargo",
+            "type": "String"
+          },
+          {
+            "name": "system",
+            "type": "Ref",
+            "ofType": "System"
+          },
+          {
+            "name": "waypoint",
+            "type": "Ref",
+            "ofType": "Waypoint"
+          },
+          {
+            "name": "cooldown",
+            "type": "Int"
+          }
+        ],
+        "actions": [
+          {
+            "name": "orbit",
+            "type": "String"
+          },
+          {
+            "name": "extract",
+            "type": "String",
+            "params": [
+              {
+                "name": "survey",
+                "type": "String"
+              }
+            ]
+          },
+          {
+            "name": "setFlightMode",
+            "type": "String",
+            "params": [
+              {
+                "name": "mode",
+                "type": "String",
+                "description": "Allowed values: DRIFT STEALTH CRUISE BURN"
+              }
+            ]
+          },
+          {
+            "name": "navigate",
+            "type": "String",
+            "params": [
+              {
+                "name": "waypointSymbol",
+                "type": "String"
+              },
+              {
+                "name": "waypoint",
+                "type": "Ref",
+                "ofType": "Waypoint"
+              }
+            ]
+          },
+          {
+            "name": "warp",
+            "type": "String",
+            "params": [
+              {
+                "name": "systemSymbol",
+                "type": "String"
+              }
+            ]
+          },
+          {
+            "name": "jump",
+            "type": "String",
+            "params": [
+              {
+                "name": "systemSymbol",
+                "type": "String"
+              }
+            ]
+          },
+          {
+            "name": "survey",
+            "type": "String"
+          },
+          {
+            "name": "sell",
+            "type": "String",
+            "params": [
+              {
+                "name": "symbol",
+                "type": "String"
+              },
+              {
+                "name": "units",
+                "type": "Int"
+              }
+            ]
+          },
+          {
+            "name": "dock",
+            "type": "String"
+          },
+          {
+            "name": "negotiateContract",
+            "type": "String"
+          },
+          {
+            "name": "refuel",
+            "type": "String"
+          },
+          {
+            "name": "purchase",
+            "type": "String",
+            "params": [
+              {
+                "name": "symbol",
+                "type": "String"
+              },
+              {
+                "name": "units",
+                "type": "Int"
+              }
+            ]
+          },
+          {
+            "name": "scanShips",
+            "type": "String"
+          },
+          {
+            "name": "scanSystems",
+            "type": "Void"
+          },
+          {
+            "name": "scanWaypoints",
+            "type": "Void"
+          },
+          {
+            "name": "refine",
+            "type": "String",
+            "description": "Attempt to refine the raw materials on your ship. The request will only succeed if your ship is capable of refining at the time of the request.",
+            "params": [
+              {
+                "name": "produce",
+                "type": "String",
+                "description": "Allowed values: IRON COPPER SILVER GOLD ALUMINUM PLATINUM URANITE MERITIUM FUEL"
+              }
+            ]
+          },
+          {
+            "name": "chart",
+            "type": "String"
+          },
+          {
+            "name": "jettison",
+            "type": "Void",
+            "params": [
+              {
+                "name": "symbol",
+                "type": "String"
+              },
+              {
+                "name": "units",
+                "type": "String"
+              }
+            ]
+          },
+          {
+            "name": "transferCargo",
+            "type": "Void",
+            "params": [
+              {
+                "name": "tradeSymbol",
+                "type": "String"
+              },
+              {
+                "name": "units",
+                "type": "String"
+              },
+              {
+                "name": "shipSymbol",
+                "type": "String"
+              }
+            ]
+          },
+          {
+            "name": "installMount",
+            "type": "Void",
+            "params": [
+              {
+                "name": "symbol",
+                "type": "String"
+              }
+            ]
+          },
+          {
+            "name": "handleArrival",
+            "type": "Void",
+            "hints": {
+              "hidden": true
+            },
+            "params": [
+              {
+                "name": "waypointSymbol",
+                "type": "String"
+              }
+            ]
+          }
+        ],
+        "events": [
+          {
+            "name": "arrived",
+            "type": "String"
+          }
+        ]
+      },
+      {
+        "name": "ShipPage",
+        "fields": [
+          {
+            "name": "items",
+            "type": "List",
+            "ofType": "Ship"
+          },
+          {
+            "name": "next",
+            "type": "Ref",
+            "ofType": "ShipPage"
+          }
+        ]
+      },
+      {
+        "name": "ShipCollection",
+        "fields": [
+          {
+            "name": "one",
+            "type": "Ship",
+            "params": [
+              {
+                "name": "symbol",
+                "type": "String"
+              }
+            ]
+          },
+          {
+            "name": "page",
+            "type": "ShipPage",
+            "params": [
+              {
+                "name": "limit",
+                "type": "Int"
+              },
+              {
+                "name": "page",
+                "type": "Int"
+              }
+            ]
+          }
+        ],
+        "actions": [
+          {
+            "name": "purchase",
+            "type": "String",
+            "description": "Purchase a ship",
+            "params": [
+              {
+                "name": "shipType",
+                "type": "String",
+                "description": "Allowed values: SHIP_PROBE SHIP_MINING_DRONE SHIP_INTERCEPTOR SHIP_LIGHT_HAULER SHIP_COMMAND_FRIGATE SHIP_EXPLORER SHIP_HEAVY_FREIGHTER SHIP_LIGHT_SHUTTLE SHIP_ORE_HOUND SHIP_REFINING_FREIGHTER"
+              },
+              {
+                "name": "waypoint",
+                "type": "Ref",
+                "ofType": "Waypoint"
+              },
+              {
+                "name": "waypointSymbol",
+                "type": "String"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "System",
+        "fields": [
+          {
+            "name": "symbol",
+            "type": "String"
+          },
+          {
+            "name": "sectorSymbol",
+            "type": "String"
+          },
+          {
+            "name": "type",
+            "type": "String",
+            "hints": {
+              "primary": true
+            }
+          },
+          {
+            "name": "x",
+            "type": "Int",
+            "hints": {
+              "primary": true
+            }
+          },
+          {
+            "name": "y",
+            "type": "Int",
+            "hints": {
+              "primary": true
+            }
+          },
+          {
+            "name": "waypoints",
+            "type": "WaypointCollection"
+          },
+          {
+            "name": "factions",
+            "type": "String"
+          }
+        ]
+      },
+      {
+        "name": "SystemPage",
+        "fields": [
+          {
+            "name": "items",
+            "type": "List",
+            "ofType": "System"
+          },
+          {
+            "name": "next",
+            "type": "Ref",
+            "ofType": "SystemPage"
+          }
+        ]
+      },
+      {
+        "name": "SystemCollection",
+        "fields": [
+          {
+            "name": "one",
+            "type": "System",
+            "params": [
+              {
+                "name": "symbol",
+                "type": "String"
+              }
+            ]
+          },
+          {
+            "name": "page",
+            "type": "SystemPage",
+            "params": [
+              {
+                "name": "page",
+                "type": "Int"
+              },
+              {
+                "name": "limit",
+                "type": "Int"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Waypoint",
+        "fields": [
+          {
+            "name": "systemSymbol",
+            "type": "String"
+          },
+          {
+            "name": "symbol",
+            "type": "String"
+          },
+          {
+            "name": "type",
+            "type": "String",
+            "hints": {
+              "primary": true
+            }
+          },
+          {
+            "name": "x",
+            "type": "Int"
+          },
+          {
+            "name": "y",
+            "type": "Int"
+          },
+          {
+            "name": "orbitals",
+            "type": "String"
+          },
+          {
+            "name": "traits",
+            "type": "String",
+            "hints": {
+              "primary": true
+            }
+          },
+          {
+            "name": "chart",
+            "type": "String"
+          },
+          {
+            "name": "faction",
+            "type": "Faction"
+          },
+          {
+            "name": "shipyard",
+            "type": "Shipyard"
+          },
+          {
+            "name": "market",
+            "type": "Market",
+            "params": []
+          },
+          {
+            "name": "jumpGate",
+            "type": "JumpGate"
+          }
+        ]
+      },
+      {
+        "name": "WaypointPage",
+        "fields": [
+          {
+            "name": "items",
+            "type": "List",
+            "ofType": "Waypoint"
+          },
+          {
+            "name": "next",
+            "type": "Ref",
+            "ofType": "WaypointPage"
+          }
+        ]
+      },
+      {
+        "name": "WaypointCollection",
+        "fields": [
+          {
+            "name": "one",
+            "type": "Waypoint",
+            "params": [
+              {
+                "name": "symbol",
+                "type": "String"
+              }
+            ]
+          },
+          {
+            "name": "page",
+            "type": "WaypointPage",
+            "params": [
+              {
+                "name": "page",
+                "type": "Int"
+              },
+              {
+                "name": "limit",
+                "type": "Int"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Market",
+        "fields": [
+          {
+            "name": "symbol",
+            "type": "String"
+          },
+          {
+            "name": "exports",
+            "type": "String"
+          },
+          {
+            "name": "imports",
+            "type": "String"
+          },
+          {
+            "name": "exchange",
+            "type": "String"
+          },
+          {
+            "name": "transactions",
+            "type": "String"
+          },
+          {
+            "name": "tradeGoods",
+            "type": "String"
+          }
+        ]
+      },
+      {
+        "name": "Shipyard",
+        "fields": [
+          {
+            "name": "symbol",
+            "type": "String"
+          },
+          {
+            "name": "shipTypes",
+            "type": "String"
+          },
+          {
+            "name": "transactions",
+            "type": "String"
+          },
+          {
+            "name": "ships",
+            "type": "String"
+          }
+        ]
+      },
+      {
+        "name": "JumpGate",
+        "fields": [
+          {
+            "name": "jumpRange",
+            "type": "Int"
+          },
+          {
+            "name": "factionSymbol",
+            "type": "String"
+          },
+          {
+            "name": "connectedSystems",
+            "type": "String"
+          }
+        ]
+      }
+    ]
+  },
+  "expressions": {
+    "system": {
+      "description": "System",
+      "type": "text",
+      "searchIn": "https://",
+      "regex": "X1-.{3,4}"
+    },
+    "waypoint": {
+      "description": "Waypoint",
+      "type": "text",
+      "searchIn": "https://",
+      "regex": "X1-.{3,4}-.{3,6}"
+    }
+  }
+}
