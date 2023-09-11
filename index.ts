@@ -55,9 +55,9 @@ async function api(
     body: JSON.stringify(body),
   });
 
-  if (res.status === 429 && retry < 5) {
+  if (res.status === 429 || (res.status === 408 && retry < 5)) {
     // TODO: Use res.headers.get("Retry-After") to wait the correct amount of time
-    const wait = Math.random() * 3 + 3;
+    const wait = 0.5 + 1.4 ** retry;
     console.log(`Rate limited, waiting ${wait} seconds...`);
     await sleep(wait);
     return await api(method, path, query, body, retry + 1);
@@ -74,18 +74,25 @@ async function api(
   return await res.json();
 }
 
-export async function configure({ args: { symbol, faction, token } }) {
+export async function configure({ symbol, faction, token, email }) {
   if (token) {
     state.data = { token };
-  } else {
+  } else if (symbol && faction) {
     delete state.data;
-    const { data } = await api("POST", "register", {}, { symbol, faction });
+    const { data } = await api(
+      "POST",
+      "register",
+      {},
+      { symbol, faction, email }
+    );
     state.data = data;
+  } else {
+    throw new Error("Must provide token or symbol and faction");
   }
 }
 
 export const Root = {
-  parse({ args: { name, value } }) {
+  parse({ name, value }) {
     switch (name) {
       case "system": {
         const [, system] = value.match(new RegExp("(X1-.{3,4})", "i"));
@@ -116,20 +123,43 @@ export const Root = {
   },
   serverStatus: async () => await api("GET", ""),
   agent: async () => (await api("GET", "my/agent")).data,
-  events: async () =>
-    JSON.stringify((await api("GET", "my/agent/events")).data),
+  events: async () => (await api("GET", "my/agent/events")).data,
   factions: () => ({}),
   contracts: () => ({}),
   ships: () => ({}),
   systems: () => ({}),
+  intel: () => ({}),
 };
 
+// // Useful information that the serve doesn't provide but we can compute from cached data.
+// export const Intel = {
+//   resourceLocations: async ({ args: { resourceSymbol } }) => {
+//     const result = [];
+//     for (const [waypoint, market] of Object.entries(state.cachedMarkets)) {
+//       if (market.tradeGoods) {
+//         const resource = market.tradeGoods.find(
+//           ({ symbol }) => symbol === resourceSymbol
+//         );
+//         if (resource) {
+//           result.push({ waypoint, sell: resource.sell, buy: resource.buy });
+//         }
+//       }
+//       const resource = (market as any).transactions.find(
+//         ({ symbol }) => symbol === resourceSymbol
+//       );
+//     }
+//     if (resource) {
+//       return JSON.stringify(resource.locations);
+//     }
+//   },
+// };
+
 export const FactionCollection = {
-  one: async ({ args: { symbol } }) => {
+  one: async ({ symbol }) => {
     const res = await api("GET", `factions/${symbol}`);
     return res.data;
   },
-  page: async ({ args }) => {
+  page: async (args) => {
     const res = await api("GET", "factions", {
       page: args.page,
       limit: args.limit,
@@ -145,15 +175,15 @@ export const FactionCollection = {
 };
 
 export const Faction = {
-  gref: ({ obj }) => root.factions.one({ symbol: obj.symbol }),
+  gref: (_, { obj }) => root.factions.one({ symbol: obj.symbol }),
 };
 
 export const ContractCollection = {
-  one: async ({ args: { id } }) => {
+  one: async ({ id }) => {
     const res = await api("GET", `my/contracts/${id}`);
     return res.data;
   },
-  page: async ({ args }) => {
+  page: async (args) => {
     const res = await api("GET", "my/contracts", {
       page: args.page,
       limit: args.limit,
@@ -169,19 +199,18 @@ export const ContractCollection = {
 };
 
 export const Contract = {
-  gref: ({ obj }) => root.contracts.one({ id: obj.id }),
-  terms: ({ obj }) => JSON.stringify(obj.terms),
-  accept: async ({ self }) => {
+  gref: (_, { obj }) => root.contracts.one({ id: obj.id }),
+  accept: async (_, { self }) => {
     const { id } = self.$argsAt(root.contracts.one);
     const res = await api("POST", `my/contracts/${id}/accept`);
-    return JSON.stringify(res.data);
+    return res.data;
   },
-  fulfill: async ({ self }) => {
+  fulfill: async (_, { self }) => {
     const { id } = self.$argsAt(root.contracts.one);
     const res = await api("POST", `my/contracts/${id}/fulfill`);
-    return JSON.stringify(res.data);
+    return res.data;
   },
-  deliver: async ({ self, args }) => {
+  deliver: async (args, { self }) => {
     if (args.shipSymbol && args.ship) {
       throw new Error("Cannot specify both shipSymbol and ship");
     }
@@ -190,16 +219,16 @@ export const Contract = {
     }
     const { id } = self.$argsAt(root.contracts.one);
     const res = await api("POST", `my/contracts/${id}/deliver`, {}, args);
-    return JSON.stringify(res.data);
+    return res.data;
   },
 };
 
 export const ShipCollection = {
-  one: async ({ args: { symbol } }) => {
+  one: async ({ symbol }) => {
     const res = await api("GET", `my/ships/${symbol}`);
     return res.data;
   },
-  page: async ({ args }) => {
+  page: async (args) => {
     const res = await api("GET", "my/ships", {
       page: args.page,
       limit: args.limit,
@@ -216,7 +245,7 @@ export const ShipCollection = {
           }),
     };
   },
-  purchase: async ({ args: { shipType, waypoint, waypointSymbol } }) => {
+  purchase: async ({ shipType, waypoint, waypointSymbol }) => {
     if (waypoint && waypointSymbol) {
       throw new Error(
         "Please provide waypoint or waypointSymbol but not both."
@@ -226,37 +255,27 @@ export const ShipCollection = {
       waypointSymbol = waypoint.$argsAt(root.systems.one.waypoints.one).symbol;
     }
     const res = await api("POST", `my/ships`, {}, { shipType, waypointSymbol });
-    return JSON.stringify(res.data);
+    return res.data;
   },
 };
 
 export const Ship = {
-  gref: ({ obj }) => root.ships.one({ symbol: obj.symbol }),
-  registration: ({ obj }) => JSON.stringify(obj.registration),
-  status: ({ obj }) => obj.nav.status,
-  nav: ({ obj }) => JSON.stringify(obj.nav),
-  crew: ({ obj }) => JSON.stringify(obj.crew),
-  frame: ({ obj }) => JSON.stringify(obj.frame),
-  reactor: ({ obj }) => JSON.stringify(obj.reactor),
-  engine: ({ obj }) => JSON.stringify(obj.engine),
-  modules: ({ obj }) => JSON.stringify(obj.modules),
-  mounts: ({ obj }) => JSON.stringify(obj.mounts),
-  cargo: ({ obj }) => JSON.stringify(obj.cargo),
-  fuel: ({ obj }) => JSON.stringify(obj.fuel),
-  system: ({ obj }) => {
+  gref: (_, { obj }) => root.ships.one({ symbol: obj.symbol }),
+  status: (_, { obj }) => obj.nav.status,
+  system: (_, { obj }) => {
     return root.systems.one({ symbol: obj.nav.systemSymbol });
   },
-  waypoint: ({ obj }) => {
+  waypoint: (_, { obj }) => {
     return root.systems
       .one({ symbol: obj.nav.systemSymbol })
       .waypoints.one({ symbol: obj.nav.waypointSymbol });
   },
-  cooldown: async ({ self }) => {
+  cooldown: async (_, { self }) => {
     const { symbol } = self.$argsAt(root.ships.one);
     const res = await api("GET", `my/ships/${symbol}/cooldown`, {}, {});
     return res?.data?.remainingSeconds ?? 0;
   },
-  orbit: async ({ self }) => {
+  orbit: async (_, { self }) => {
     const { symbol } = self.$argsAt(root.ships.one);
     const res = await api(
       "POST",
@@ -264,9 +283,9 @@ export const Ship = {
       { shipSymbol: symbol },
       {}
     );
-    return JSON.stringify(res.data);
+    return res.data;
   },
-  dock: async ({ self }) => {
+  dock: async (_, { self }) => {
     const { symbol } = self.$argsAt(root.ships.one);
     const res = await api(
       "POST",
@@ -274,9 +293,9 @@ export const Ship = {
       { shipSymbol: symbol },
       {}
     );
-    return JSON.stringify(res.data);
+    return res.data;
   },
-  negotiateContract: async ({ self }) => {
+  negotiateContract: async (_, { self }) => {
     const { symbol } = self.$argsAt(root.ships.one);
     const res = await api(
       "POST",
@@ -284,9 +303,9 @@ export const Ship = {
       { shipSymbol: symbol },
       {}
     );
-    return JSON.stringify(res.data);
+    return res.data;
   },
-  refuel: async ({ self }) => {
+  refuel: async (_, { self }) => {
     const { symbol } = self.$argsAt(root.ships.one);
     const res = await api(
       "POST",
@@ -294,9 +313,9 @@ export const Ship = {
       { shipSymbol: symbol },
       {}
     );
-    return JSON.stringify(res.data);
+    return res.data;
   },
-  refine: async ({ self, args: { produce } }) => {
+  refine: async ({ produce }, { self }) => {
     const { symbol } = self.$argsAt(root.ships.one);
     const res = await api(
       "POST",
@@ -304,9 +323,9 @@ export const Ship = {
       { shipSymbol: symbol },
       { produce }
     );
-    return JSON.stringify(res.data);
+    return res.data;
   },
-  scanShips: async ({ self }) => {
+  scanShips: async (_, { self }) => {
     const { symbol } = self.$argsAt(root.ships.one);
     const res = await api(
       "POST",
@@ -314,9 +333,9 @@ export const Ship = {
       { shipSymbol: symbol },
       {}
     );
-    return JSON.stringify(res.data);
+    return res.data;
   },
-  scanSystems: async ({ self }) => {
+  scanSystems: async (_, { self }) => {
     const { symbol } = self.$argsAt(root.ships.one);
     const res = await api(
       "POST",
@@ -324,9 +343,9 @@ export const Ship = {
       { shipSymbol: symbol },
       {}
     );
-    return JSON.stringify(res.data);
+    return res.data;
   },
-  scanWaypoints: async ({ self }) => {
+  scanWaypoints: async (_, { self }) => {
     const { symbol } = self.$argsAt(root.ships.one);
     const res = await api(
       "POST",
@@ -334,9 +353,9 @@ export const Ship = {
       { shipSymbol: symbol },
       {}
     );
-    return JSON.stringify(res.data);
+    return res.data;
   },
-  chart: async ({ self }) => {
+  chart: async (_, { self }) => {
     const { symbol } = self.$argsAt(root.ships.one);
     const res = await api(
       "POST",
@@ -344,9 +363,9 @@ export const Ship = {
       { shipSymbol: symbol },
       {}
     );
-    return JSON.stringify(res.data);
+    return res.data;
   },
-  extract: async ({ self, args }) => {
+  extract: async (args, { self }) => {
     const { symbol } = self.$argsAt(root.ships.one);
     const res = await api(
       "POST",
@@ -356,9 +375,9 @@ export const Ship = {
         survey: args.survey ? JSON.parse(args.survey) : undefined,
       }
     );
-    return JSON.stringify(res.data);
+    return res.data;
   },
-  purchase: async ({ self, args }) => {
+  purchase: async (args, { self }) => {
     const { symbol } = self.$argsAt(root.ships.one);
     const res = await api(
       "POST",
@@ -369,9 +388,23 @@ export const Ship = {
         units: args.units,
       }
     );
-    return JSON.stringify(res.data);
+    return res.data;
   },
-  jettison: async ({ self, args }) => {
+  transferCargo: async (args, { self }) => {
+    const { symbol } = self.$argsAt(root.ships.one);
+    const res = await api(
+      "POST",
+      `my/ships/${symbol}/transfer`,
+      {},
+      {
+        tradeSymbol: args.tradeSymbol,
+        units: args.units,
+        shipSymbol: args.shipSymbol,
+      }
+    );
+    return res.data;
+  },
+  jettison: async (args, { self }) => {
     const { symbol } = self.$argsAt(root.ships.one);
     const res = await api(
       "POST",
@@ -382,9 +415,9 @@ export const Ship = {
         units: args.units,
       }
     );
-    return JSON.stringify(res.data);
+    return res.data;
   },
-  installMount: async ({ self, args }) => {
+  installMount: async (args, { self }) => {
     const { symbol } = self.$argsAt(root.ships.one);
     const res = await api(
       "POST",
@@ -394,9 +427,9 @@ export const Ship = {
         symbol: args.symbol,
       }
     );
-    return JSON.stringify(res.data);
+    return res.data;
   },
-  setFlightMode: async ({ self, args }) => {
+  setFlightMode: async (args, { self }) => {
     const { symbol } = self.$argsAt(root.ships.one);
     if (!/^(CRUISE|BURN|DRIFT|STEALTH)$/.test(args.mode)) {
       throw new Error(
@@ -409,9 +442,9 @@ export const Ship = {
       {},
       { flightMode: args.mode }
     );
-    return JSON.stringify(res.data);
+    return res.data;
   },
-  navigate: async ({ self, args: { waypoint, waypointSymbol } }) => {
+  navigate: async ({ waypoint, waypointSymbol }, { self }) => {
     if (waypoint && waypointSymbol) {
       throw new Error(
         "Please provide waypoint or waypointSymbol but not both."
@@ -431,22 +464,22 @@ export const Ship = {
     if (arrival) {
       self.handleArrival({ waypointSymbol }).$invokeAt(new Date(arrival));
     }
-    return JSON.stringify(res.data);
+    return res.data;
   },
-  handleArrival: ({ self, args }) => {
+  handleArrival: (args, { self }) => {
     self.arrived.$emit(args.waypointSymbol);
   },
-  warp: async ({ self, args: { systemSymbol } }) => {
+  warp: async ({ waypointSymbol }, { self }) => {
     const { symbol } = self.$argsAt(root.ships.one);
     const res = await api(
       "POST",
       `my/ships/${symbol}/warp`,
       {},
-      { systemSymbol }
+      { waypointSymbol }
     );
-    return JSON.stringify(res.data);
+    return res.data;
   },
-  jump: async ({ self, args: { systemSymbol } }) => {
+  jump: async ({ systemSymbol }, { self }) => {
     const { symbol } = self.$argsAt(root.ships.one);
     const res = await api(
       "POST",
@@ -454,14 +487,14 @@ export const Ship = {
       {},
       { systemSymbol }
     );
-    return JSON.stringify(res.data);
+    return res.data;
   },
-  survey: async ({ self }) => {
+  survey: async (_, { self }) => {
     const { symbol } = self.$argsAt(root.ships.one);
     const res = await api("POST", `my/ships/${symbol}/survey`);
-    return JSON.stringify(res.data);
+    return res.data;
   },
-  sell: async ({ self, args: { symbol: resourceSymbol, units } }) => {
+  sell: async ({ symbol: resourceSymbol, units }, { self }) => {
     const { symbol } = self.$argsAt(root.ships.one);
     const res = await api(
       "POST",
@@ -469,19 +502,19 @@ export const Ship = {
       {},
       { symbol: resourceSymbol, units: units }
     );
-    return JSON.stringify(res.data);
+    return res.data;
   },
 };
 
 export const SystemCollection = {
-  one: async ({ args: { symbol }, info }) => {
+  one: async ({ symbol }, { info }) => {
     if (!shouldFetch(info, ["symbol", "waypoints"])) {
       return { symbol };
     }
     const res = await api("GET", `systems/${symbol}`);
     return res.data;
   },
-  page: async ({ args }) => {
+  page: async (args) => {
     const res = await api("GET", "systems", {
       page: args.page,
       limit: args.limit,
@@ -501,19 +534,18 @@ export const SystemCollection = {
 };
 
 export const System = {
-  gref: ({ obj, context }) =>
+  gref: (_, { obj, context }) =>
     root.systems.one({ symbol: obj.symbol || context.systemSymbol }),
-  waypoints: ({ obj }) => obj,
-  factions: ({ obj }) => JSON.stringify(obj.factions),
+  waypoints: (_, { obj }) => obj,
 };
 
 export const WaypointCollection = {
-  one: async ({ self, args: { symbol }, context }) => {
+  one: async ({ symbol }, { self, context }) => {
     let system = self.$argsAt(root.systems.one)?.symbol || context.systemSymbol;
     const res = await api("GET", `systems/${system}/waypoints/${symbol}`);
     return res.data;
   },
-  page: async ({ self, obj, args, context }) => {
+  page: async (args, { self, obj, context }) => {
     let system = self.$argsAt(root.systems.one)?.symbol || context.systemSymbol;
     const res = await api("GET", `systems/${system}/waypoints`, {
       page: args.page,
@@ -534,23 +566,24 @@ export const WaypointCollection = {
 };
 
 export const Waypoint = {
-  gref: ({ self, obj, context }) => {
+  gref: (_, { self, obj, context }) => {
     let system = self.$argsAt(root.systems.one).symbol || context.systemSymbol;
+    console.log("RESOLVING WAYPOINT GREF");
     return root.systems
       .one({ symbol: system })
       .waypoints.one({ symbol: obj.symbol });
   },
-  orbitals: ({ obj }) => JSON.stringify(obj.orbitals),
-  traits: ({ obj }) => JSON.stringify(obj.traits),
-  chart: ({ obj }) => JSON.stringify(obj.chart),
-  faction: ({ obj }) => {
+  orbitals: (_, { obj }) => obj.orbitals,
+  traits: (_, { obj }) => obj.traits,
+  chart: (_, { obj }) => obj.chart,
+  faction: (_, { obj }) => {
     return FactionCollection.one({ args: { symbol: obj.faction.symbol } });
   },
-  shipyard: async ({ self, obj, context }) => {
+  shipyard: async (_, { self, obj, context }) => {
     let system = self.$argsAt(root.systems.one)?.symbol || context.systemSymbol;
     let waypoint =
       obj.symbol ?? self.$argsAt(root.systems.one.waypoints.one)?.symbol;
-    if (obj?.traits?.every(({ symbol }) => symbol !== "SHIPYARD")) {
+    if (obj?.traits?.every((_, { symbol }) => symbol !== "SHIPYARD")) {
       return null;
     }
     try {
@@ -566,7 +599,7 @@ export const Waypoint = {
       throw err;
     }
   },
-  market: async ({ self, obj, context }) => {
+  market: async (_, { self, obj, context }) => {
     let system = self.$argsAt(root.systems.one)?.symbol || context.systemSymbol;
     let waypoint =
       obj.symbol ?? self.$argsAt(root.systems.one.waypoints.one)?.symbol;
@@ -575,7 +608,7 @@ export const Waypoint = {
       return state.cachedMarkets[waypoint];
     }
 
-    if (obj?.traits?.every(({ symbol }) => symbol !== "MARKETPLACE")) {
+    if (obj?.traits?.every((_, { symbol }) => symbol !== "MARKETPLACE")) {
       return null;
     }
     try {
@@ -592,7 +625,7 @@ export const Waypoint = {
       throw err;
     }
   },
-  jumpGate: async ({ self, obj, context }) => {
+  jumpGate: async (_, { self, obj, context }) => {
     let system = self.$argsAt(root.systems.one)?.symbol || context.systemSymbol;
     let waypoint =
       obj.symbol ?? self.$argsAt(root.systems.one.waypoints.one)?.symbol;
@@ -612,36 +645,11 @@ export const Waypoint = {
       state.cachedJumpGates[waypoint] = res.data;
       return res.data;
     } catch (err) {
-      if (err.status === 404) {
+      // Returns 400 when not available
+      if (err.status === 400) {
         return null;
       }
       throw err;
     }
   },
-};
-
-export const Market = {
-  exports: ({ obj }) => JSON.stringify(obj.exports),
-  imports: ({ obj }) => JSON.stringify(obj.imports),
-  exchange: ({ obj }) => JSON.stringify(obj.exchange),
-  transactions: ({ obj }) => JSON.stringify(obj.transactions),
-  tradeGoods: ({ obj }) => JSON.stringify(obj.tradeGoods),
-};
-
-export const Shipyard = {
-  shipTypes: ({ obj }) => JSON.stringify(obj.shipTypes),
-  transactions: ({ obj }) => JSON.stringify(obj.transactions),
-  ships: ({ obj }) => JSON.stringify(obj.ships),
-};
-
-export const JumpGate = {
-  connectedSystems: ({ obj }) => JSON.stringify(obj.connectedSystems),
-};
-
-export const ServerStatus = {
-  stats: ({ obj }) => JSON.stringify(obj.stats),
-  leaderboards: ({ obj }) => JSON.stringify(obj.leaderboards),
-  serverResets: ({ obj }) => JSON.stringify(obj.serverResets),
-  announcements: ({ obj }) => JSON.stringify(obj.announcements),
-  links: ({ obj }) => JSON.stringify(obj.links),
 };

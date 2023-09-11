@@ -22,17 +22,20 @@
                   {
                     "name": "url",
                     "description": "",
-                    "type": "String"
+                    "type": "String",
+                    "optional": false
                   },
                   {
                     "name": "headers",
                     "description": "",
-                    "type": "String"
+                    "type": "String",
+                    "optional": true
                   },
                   {
                     "name": "body",
                     "description": "",
-                    "type": "String"
+                    "type": "String",
+                    "optional": true
                   }
                 ],
                 "hints": {}
@@ -45,17 +48,20 @@
                   {
                     "name": "url",
                     "description": "",
-                    "type": "String"
+                    "type": "String",
+                    "optional": false
                   },
                   {
                     "name": "headers",
                     "description": "",
-                    "type": "String"
+                    "type": "String",
+                    "optional": true
                   },
                   {
                     "name": "body",
                     "description": "",
-                    "type": "String"
+                    "type": "String",
+                    "optional": true
                   }
                 ],
                 "hints": {}
@@ -68,17 +74,20 @@
                   {
                     "name": "url",
                     "description": "",
-                    "type": "String"
+                    "type": "String",
+                    "optional": false
                   },
                   {
                     "name": "headers",
                     "description": "",
-                    "type": "String"
+                    "type": "String",
+                    "optional": true
                   },
                   {
                     "name": "body",
                     "description": "",
-                    "type": "String"
+                    "type": "String",
+                    "optional": true
                   }
                 ],
                 "hints": {}
@@ -91,20 +100,63 @@
                   {
                     "name": "url",
                     "description": "",
-                    "type": "String"
+                    "type": "String",
+                    "optional": false
                   },
                   {
                     "name": "headers",
                     "description": "",
-                    "type": "String"
+                    "type": "String",
+                    "optional": true
                   },
                   {
                     "name": "body",
                     "description": "",
-                    "type": "String"
+                    "type": "String",
+                    "optional": true
                   }
                 ],
                 "hints": {}
+              },
+              {
+                "name": "endpoint",
+                "description": "The endpoint action",
+                "type": "String",
+                "params": [
+                  {
+                    "name": "method",
+                    "description": "HTTP method",
+                    "type": "String",
+                    "optional": false
+                  },
+                  {
+                    "name": "path",
+                    "description": "HTTP path",
+                    "type": "String",
+                    "optional": false
+                  },
+                  {
+                    "name": "query",
+                    "description": "HTTP query string, encoded as JSON",
+                    "type": "String",
+                    "optional": true
+                  },
+                  {
+                    "name": "headers",
+                    "description": "HTTP headers, encoded as JSON",
+                    "type": "String",
+                    "optional": false
+                  },
+                  {
+                    "name": "body",
+                    "description": "HTTP body, if any",
+                    "type": "String",
+                    "optional": true
+                  }
+                ],
+                "hints": {
+                  "hidden": true
+                }
               }
             ],
             "fields": [
@@ -123,12 +175,14 @@
                   {
                     "name": "url",
                     "description": "",
-                    "type": "String"
+                    "type": "String",
+                    "optional": false
                   },
                   {
                     "name": "headers",
                     "description": "",
-                    "type": "String"
+                    "type": "String",
+                    "optional": true
                   }
                 ],
                 "hints": {}
@@ -141,13 +195,15 @@
                   {
                     "name": "api",
                     "description": "The API to use. Check https://www.membrane.io/docs for a list of APIs that support this",
-                    "type": "String"
+                    "type": "String",
+                    "optional": false
                   },
                   {
                     "name": "authId",
                     "description": "An arbitrary gref that uniquely identifies this program.",
                     "type": "Ref",
-                    "ofType": "String"
+                    "ofType": "String",
+                    "optional": false
                   }
                 ],
                 "hints": {}
@@ -219,17 +275,20 @@
                   {
                     "name": "url",
                     "description": "",
-                    "type": "String"
+                    "type": "String",
+                    "optional": false
                   },
                   {
                     "name": "headers",
                     "description": "",
-                    "type": "String"
+                    "type": "String",
+                    "optional": true
                   },
                   {
                     "name": "body",
                     "description": "",
-                    "type": "String"
+                    "type": "String",
+                    "optional": true
                   }
                 ],
                 "hints": {}
@@ -242,17 +301,20 @@
                   {
                     "name": "url",
                     "description": "",
-                    "type": "String"
+                    "type": "String",
+                    "optional": false
                   },
                   {
                     "name": "headers",
                     "description": "",
-                    "type": "String"
+                    "type": "String",
+                    "optional": true
                   },
                   {
                     "name": "body",
                     "description": "",
-                    "type": "String"
+                    "type": "String",
+                    "optional": true
                   }
                 ],
                 "hints": {}
@@ -265,17 +327,20 @@
                   {
                     "name": "url",
                     "description": "",
-                    "type": "String"
+                    "type": "String",
+                    "optional": false
                   },
                   {
                     "name": "headers",
                     "description": "",
-                    "type": "String"
+                    "type": "String",
+                    "optional": true
                   },
                   {
                     "name": "body",
                     "description": "",
-                    "type": "String"
+                    "type": "String",
+                    "optional": true
                   }
                 ],
                 "hints": {}
@@ -288,17 +353,20 @@
                   {
                     "name": "url",
                     "description": "",
-                    "type": "String"
+                    "type": "String",
+                    "optional": false
                   },
                   {
                     "name": "headers",
                     "description": "",
-                    "type": "String"
+                    "type": "String",
+                    "optional": true
                   },
                   {
                     "name": "body",
                     "description": "",
-                    "type": "String"
+                    "type": "String",
+                    "optional": true
                   }
                 ],
                 "hints": {}
@@ -313,12 +381,14 @@
                   {
                     "name": "url",
                     "description": "",
-                    "type": "String"
+                    "type": "String",
+                    "optional": false
                   },
                   {
                     "name": "headers",
                     "description": "",
-                    "type": "String"
+                    "type": "String",
+                    "optional": false
                   }
                 ],
                 "hints": {}
@@ -359,17 +429,20 @@
                         {
                           "name": "url",
                           "description": "",
-                          "type": "String"
+                          "type": "String",
+                          "optional": false
                         },
                         {
                           "name": "headers",
                           "description": "",
-                          "type": "String"
+                          "type": "String",
+                          "optional": false
                         },
                         {
                           "name": "body",
                           "description": "",
-                          "type": "String"
+                          "type": "String",
+                          "optional": false
                         }
                       ],
                       "hints": {}
@@ -382,17 +455,20 @@
                         {
                           "name": "url",
                           "description": "",
-                          "type": "String"
+                          "type": "String",
+                          "optional": false
                         },
                         {
                           "name": "headers",
                           "description": "",
-                          "type": "String"
+                          "type": "String",
+                          "optional": false
                         },
                         {
                           "name": "body",
                           "description": "",
-                          "type": "String"
+                          "type": "String",
+                          "optional": false
                         }
                       ],
                       "hints": {}
@@ -405,17 +481,20 @@
                         {
                           "name": "url",
                           "description": "",
-                          "type": "String"
+                          "type": "String",
+                          "optional": false
                         },
                         {
                           "name": "headers",
                           "description": "",
-                          "type": "String"
+                          "type": "String",
+                          "optional": false
                         },
                         {
                           "name": "body",
                           "description": "",
-                          "type": "String"
+                          "type": "String",
+                          "optional": false
                         }
                       ],
                       "hints": {}
@@ -428,17 +507,20 @@
                         {
                           "name": "url",
                           "description": "",
-                          "type": "String"
+                          "type": "String",
+                          "optional": false
                         },
                         {
                           "name": "headers",
                           "description": "",
-                          "type": "String"
+                          "type": "String",
+                          "optional": false
                         },
                         {
                           "name": "body",
                           "description": "",
-                          "type": "String"
+                          "type": "String",
+                          "optional": false
                         }
                       ],
                       "hints": {}
@@ -453,12 +535,14 @@
                         {
                           "name": "url",
                           "description": "",
-                          "type": "String"
+                          "type": "String",
+                          "optional": false
                         },
                         {
                           "name": "headers",
                           "description": "",
-                          "type": "String"
+                          "type": "String",
+                          "optional": false
                         }
                       ],
                       "hints": {}
@@ -471,13 +555,15 @@
                         {
                           "name": "api",
                           "description": "",
-                          "type": "String"
+                          "type": "String",
+                          "optional": false
                         },
                         {
                           "name": "authId",
                           "description": "",
                           "type": "Ref",
-                          "ofType": "String"
+                          "ofType": "String",
+                          "optional": false
                         }
                       ],
                       "hints": {}
@@ -533,17 +619,20 @@
                         {
                           "name": "url",
                           "description": "",
-                          "type": "String"
+                          "type": "String",
+                          "optional": false
                         },
                         {
                           "name": "headers",
                           "description": "",
-                          "type": "String"
+                          "type": "String",
+                          "optional": false
                         },
                         {
                           "name": "body",
                           "description": "",
-                          "type": "String"
+                          "type": "String",
+                          "optional": false
                         }
                       ],
                       "hints": {}
@@ -556,17 +645,20 @@
                         {
                           "name": "url",
                           "description": "",
-                          "type": "String"
+                          "type": "String",
+                          "optional": false
                         },
                         {
                           "name": "headers",
                           "description": "",
-                          "type": "String"
+                          "type": "String",
+                          "optional": false
                         },
                         {
                           "name": "body",
                           "description": "",
-                          "type": "String"
+                          "type": "String",
+                          "optional": false
                         }
                       ],
                       "hints": {}
@@ -579,17 +671,20 @@
                         {
                           "name": "url",
                           "description": "",
-                          "type": "String"
+                          "type": "String",
+                          "optional": false
                         },
                         {
                           "name": "headers",
                           "description": "",
-                          "type": "String"
+                          "type": "String",
+                          "optional": false
                         },
                         {
                           "name": "body",
                           "description": "",
-                          "type": "String"
+                          "type": "String",
+                          "optional": false
                         }
                       ],
                       "hints": {}
@@ -602,17 +697,20 @@
                         {
                           "name": "url",
                           "description": "",
-                          "type": "String"
+                          "type": "String",
+                          "optional": false
                         },
                         {
                           "name": "headers",
                           "description": "",
-                          "type": "String"
+                          "type": "String",
+                          "optional": false
                         },
                         {
                           "name": "body",
                           "description": "",
-                          "type": "String"
+                          "type": "String",
+                          "optional": false
                         }
                       ],
                       "hints": {}
@@ -627,12 +725,14 @@
                         {
                           "name": "url",
                           "description": "",
-                          "type": "String"
+                          "type": "String",
+                          "optional": false
                         },
                         {
                           "name": "headers",
                           "description": "",
-                          "type": "String"
+                          "type": "String",
+                          "optional": false
                         }
                       ],
                       "hints": {}
@@ -670,12 +770,14 @@
                         {
                           "name": "key",
                           "description": "",
-                          "type": "String"
+                          "type": "String",
+                          "optional": false
                         },
                         {
                           "name": "seconds",
                           "description": "",
-                          "type": "Float"
+                          "type": "Float",
+                          "optional": false
                         }
                       ],
                       "hints": {}
@@ -691,17 +793,20 @@
                         {
                           "name": "key",
                           "description": "",
-                          "type": "String"
+                          "type": "String",
+                          "optional": false
                         },
                         {
                           "name": "spec",
                           "description": "",
-                          "type": "String"
+                          "type": "String",
+                          "optional": false
                         },
                         {
                           "name": "maxCount",
                           "description": "",
-                          "type": "Int"
+                          "type": "Int",
+                          "optional": false
                         }
                       ],
                       "hints": {}
@@ -714,12 +819,14 @@
                         {
                           "name": "key",
                           "description": "",
-                          "type": "String"
+                          "type": "String",
+                          "optional": false
                         },
                         {
                           "name": "seconds",
                           "description": "",
-                          "type": "String"
+                          "type": "String",
+                          "optional": false
                         }
                       ],
                       "hints": {}

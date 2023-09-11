@@ -13,15 +13,23 @@
             "params": [
               {
                 "name": "faction",
-                "type": "String"
+                "type": "String",
+                "optional": true
               },
               {
                 "name": "symbol",
-                "type": "String"
+                "type": "String",
+                "optional": true
               },
               {
                 "name": "token",
-                "type": "String"
+                "type": "String",
+                "optional": true
+              },
+              {
+                "name": "email",
+                "type": "String",
+                "optional": true
               }
             ]
           }
@@ -54,7 +62,7 @@
           },
           {
             "name": "events",
-            "type": "String"
+            "type": "Json"
           },
           {
             "name": "status",
@@ -80,6 +88,10 @@
                 "type": "String"
               }
             ]
+          },
+          {
+            "name": "intel",
+            "type": "Intel"
           }
         ]
       },
@@ -142,11 +154,13 @@
             "params": [
               {
                 "name": "page",
-                "type": "Int"
+                "type": "Int",
+                "optional": true
               },
               {
                 "name": "limit",
-                "type": "Int"
+                "type": "Int",
+                "optional": true
               }
             ]
           }
@@ -198,23 +212,23 @@
           },
           {
             "name": "stats",
-            "type": "String"
+            "type": "Json"
           },
           {
             "name": "leaderboards",
-            "type": "String"
+            "type": "Json"
           },
           {
             "name": "serverResets",
-            "type": "String"
+            "type": "Json"
           },
           {
             "name": "announcements",
-            "type": "String"
+            "type": "Json"
           },
           {
             "name": "links",
-            "type": "String"
+            "type": "Json"
           }
         ]
       },
@@ -241,7 +255,7 @@
           },
           {
             "name": "terms",
-            "type": "String",
+            "type": "Json",
             "hints": {
               "primary": true
             }
@@ -266,15 +280,16 @@
         "actions": [
           {
             "name": "accept",
-            "type": "String"
+            "type": "Json"
           },
           {
             "name": "deliver",
-            "type": "String",
+            "type": "Json",
             "params": [
               {
                 "name": "shipSymbol",
-                "type": "String"
+                "type": "String",
+                "optional": true
               },
               {
                 "name": "tradeSymbol",
@@ -287,13 +302,14 @@
               {
                 "name": "ship",
                 "type": "Ref",
-                "ofType": "Ship"
+                "ofType": "Ship",
+                "optional": true
               }
             ]
           },
           {
             "name": "fulfill",
-            "type": "String"
+            "type": "Json"
           }
         ]
       },
@@ -331,11 +347,13 @@
             "params": [
               {
                 "name": "page",
-                "type": "Int"
+                "type": "Int",
+                "optional": true
               },
               {
                 "name": "limit",
-                "type": "Int"
+                "type": "Int",
+                "optional": true
               }
             ]
           }
@@ -354,43 +372,43 @@
           },
           {
             "name": "registration",
-            "type": "String"
+            "type": "Json"
           },
           {
             "name": "nav",
-            "type": "String"
+            "type": "Json"
           },
           {
             "name": "crew",
-            "type": "String"
+            "type": "Json"
           },
           {
             "name": "frame",
-            "type": "String"
+            "type": "Json"
           },
           {
             "name": "reactor",
-            "type": "String"
+            "type": "Json"
           },
           {
             "name": "engine",
-            "type": "String"
+            "type": "Json"
           },
           {
             "name": "modules",
-            "type": "String"
+            "type": "Json"
           },
           {
             "name": "mounts",
-            "type": "String"
+            "type": "Json"
           },
           {
             "name": "fuel",
-            "type": "String"
+            "type": "Json"
           },
           {
             "name": "cargo",
-            "type": "String"
+            "type": "Json"
           },
           {
             "name": "system",
@@ -410,21 +428,22 @@
         "actions": [
           {
             "name": "orbit",
-            "type": "String"
+            "type": "Json"
           },
           {
             "name": "extract",
-            "type": "String",
+            "type": "Json",
             "params": [
               {
                 "name": "survey",
-                "type": "String"
+                "type": "String",
+                "optional": true
               }
             ]
           },
           {
             "name": "setFlightMode",
-            "type": "String",
+            "type": "Json",
             "params": [
               {
                 "name": "mode",
@@ -435,32 +454,34 @@
           },
           {
             "name": "navigate",
-            "type": "String",
+            "type": "Json",
             "params": [
               {
                 "name": "waypointSymbol",
-                "type": "String"
+                "type": "String",
+                "optional": true
               },
               {
                 "name": "waypoint",
                 "type": "Ref",
-                "ofType": "Waypoint"
+                "ofType": "Waypoint",
+                "optional": true
               }
             ]
           },
           {
             "name": "warp",
-            "type": "String",
+            "type": "Json",
             "params": [
               {
-                "name": "systemSymbol",
+                "name": "waypointSymbol",
                 "type": "String"
               }
             ]
           },
           {
             "name": "jump",
-            "type": "String",
+            "type": "Json",
             "params": [
               {
                 "name": "systemSymbol",
@@ -470,11 +491,11 @@
           },
           {
             "name": "survey",
-            "type": "String"
+            "type": "Json"
           },
           {
             "name": "sell",
-            "type": "String",
+            "type": "Json",
             "params": [
               {
                 "name": "symbol",
@@ -488,19 +509,19 @@
           },
           {
             "name": "dock",
-            "type": "String"
+            "type": "Json"
           },
           {
             "name": "negotiateContract",
-            "type": "String"
+            "type": "Json"
           },
           {
             "name": "refuel",
-            "type": "String"
+            "type": "Json"
           },
           {
             "name": "purchase",
-            "type": "String",
+            "type": "Json",
             "params": [
               {
                 "name": "symbol",
@@ -514,19 +535,19 @@
           },
           {
             "name": "scanShips",
-            "type": "String"
+            "type": "Json"
           },
           {
             "name": "scanSystems",
-            "type": "Void"
+            "type": "Json"
           },
           {
             "name": "scanWaypoints",
-            "type": "Void"
+            "type": "Json"
           },
           {
             "name": "refine",
-            "type": "String",
+            "type": "Json",
             "description": "Attempt to refine the raw materials on your ship. The request will only succeed if your ship is capable of refining at the time of the request.",
             "params": [
               {
@@ -538,11 +559,11 @@
           },
           {
             "name": "chart",
-            "type": "String"
+            "type": "Json"
           },
           {
             "name": "jettison",
-            "type": "Void",
+            "type": "Json",
             "params": [
               {
                 "name": "symbol",
@@ -556,7 +577,7 @@
           },
           {
             "name": "transferCargo",
-            "type": "Void",
+            "type": "Json",
             "params": [
               {
                 "name": "tradeSymbol",
@@ -574,7 +595,7 @@
           },
           {
             "name": "installMount",
-            "type": "Void",
+            "type": "Json",
             "params": [
               {
                 "name": "symbol",
@@ -637,11 +658,13 @@
             "params": [
               {
                 "name": "limit",
-                "type": "Int"
+                "type": "Int",
+                "optional": true
               },
               {
                 "name": "page",
-                "type": "Int"
+                "type": "Int",
+                "optional": true
               }
             ]
           }
@@ -649,7 +672,7 @@
         "actions": [
           {
             "name": "purchase",
-            "type": "String",
+            "type": "Json",
             "description": "Purchase a ship",
             "params": [
               {
@@ -660,11 +683,13 @@
               {
                 "name": "waypoint",
                 "type": "Ref",
-                "ofType": "Waypoint"
+                "ofType": "Waypoint",
+                "optional": true
               },
               {
                 "name": "waypointSymbol",
-                "type": "String"
+                "type": "String",
+                "optional": true
               }
             ]
           }
@@ -708,7 +733,7 @@
           },
           {
             "name": "factions",
-            "type": "String"
+            "type": "Json"
           }
         ]
       },
@@ -746,11 +771,13 @@
             "params": [
               {
                 "name": "page",
-                "type": "Int"
+                "type": "Int",
+                "optional": true
               },
               {
                 "name": "limit",
-                "type": "Int"
+                "type": "Int",
+                "optional": true
               }
             ]
           }
@@ -784,18 +811,18 @@
           },
           {
             "name": "orbitals",
-            "type": "String"
+            "type": "Json"
           },
           {
             "name": "traits",
-            "type": "String",
+            "type": "Json",
             "hints": {
               "primary": true
             }
           },
           {
             "name": "chart",
-            "type": "String"
+            "type": "Json"
           },
           {
             "name": "faction",
@@ -850,11 +877,13 @@
             "params": [
               {
                 "name": "page",
-                "type": "Int"
+                "type": "Int",
+                "optional": true
               },
               {
                 "name": "limit",
-                "type": "Int"
+                "type": "Int",
+                "optional": true
               }
             ]
           }
@@ -869,23 +898,23 @@
           },
           {
             "name": "exports",
-            "type": "String"
+            "type": "Json"
           },
           {
             "name": "imports",
-            "type": "String"
+            "type": "Json"
           },
           {
             "name": "exchange",
-            "type": "String"
+            "type": "Json"
           },
           {
             "name": "transactions",
-            "type": "String"
+            "type": "Json"
           },
           {
             "name": "tradeGoods",
-            "type": "String"
+            "type": "Json"
           }
         ]
       },
@@ -898,15 +927,15 @@
           },
           {
             "name": "shipTypes",
-            "type": "String"
+            "type": "Json"
           },
           {
             "name": "transactions",
-            "type": "String"
+            "type": "Json"
           },
           {
             "name": "ships",
-            "type": "String"
+            "type": "Json"
           }
         ]
       },
@@ -923,7 +952,22 @@
           },
           {
             "name": "connectedSystems",
-            "type": "String"
+            "type": "Json"
+          }
+        ]
+      },
+      {
+        "name": "Intel",
+        "fields": [
+          {
+            "name": "resourceLocations",
+            "type": "String",
+            "params": [
+              {
+                "name": "name",
+                "type": "String"
+              }
+            ]
           }
         ]
       }
