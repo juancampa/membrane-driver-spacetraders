@@ -92,6 +92,10 @@
           {
             "name": "intel",
             "type": "Intel"
+          },
+          {
+            "name": "tests",
+            "type": "Tests"
           }
         ]
       },
@@ -968,6 +972,39 @@
                 "type": "String"
               }
             ]
+          }
+        ]
+      },
+      {
+        "name": "Tests",
+        "actions": [
+          {
+            "name": "testGetFactions",
+            "type": "Boolean"
+          },
+          {
+            "name": "testGetAgent",
+            "type": "Boolean"
+          },
+          {
+            "name": "testServerStatus",
+            "type": "Boolean"
+          },
+          {
+            "name": "testGetShips",
+            "type": "Boolean"
+          },
+          {
+            "name": "testGetSystems",
+            "type": "Boolean"
+          },
+          {
+            "name": "testGetEvents",
+            "type": "Boolean"
+          },
+          {
+            "name": "testGetContracts",
+            "type": "Boolean"
           }
         ]
       }

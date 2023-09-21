@@ -129,6 +129,38 @@ export const Root = {
   ships: () => ({}),
   systems: () => ({}),
   intel: () => ({}),
+  tests: () => ({}),
+};
+
+export const Tests = {
+  testGetFactions: async () => {
+    const factions = await root.factions.page.items.$query(`{ symbol }`);
+    return Array.isArray(factions);
+  },
+  testGetAgent: async () => {
+    const credits = await root.agent.credits;
+    return typeof credits === "number";
+  },
+  testGetEvents: async () => {
+    const events = await root.events;
+    return Array.isArray(events);
+  },
+  testGetContracts: async () => {
+    const contracts = await root.contracts.page.items.$query(`{ id }`);
+    return Array.isArray(contracts);
+  },
+  testGetShips: async () => {
+    const ships = await root.ships.page.items.$query(`{ symbol }`);
+    return Array.isArray(ships);
+  },
+  testGetSystems: async () => {
+    const systems = await root.systems.page.items.$query(`{ symbol }`);
+    return Array.isArray(systems);
+  },
+  testServerStatus: async () => {
+    const status = await root.serverStatus.status;
+    return typeof status === "string";
+  }
 };
 
 // // Useful information that the serve doesn't provide but we can compute from cached data.
@@ -577,7 +609,7 @@ export const Waypoint = {
   traits: (_, { obj }) => obj.traits,
   chart: (_, { obj }) => obj.chart,
   faction: (_, { obj }) => {
-    return FactionCollection.one({ args: { symbol: obj.faction.symbol } });
+    return FactionCollection.one({ symbol: obj.faction.symbol });
   },
   shipyard: async (_, { self, obj, context }) => {
     let system = self.$argsAt(root.systems.one)?.symbol || context.systemSymbol;
