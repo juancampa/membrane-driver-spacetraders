@@ -38,35 +38,43 @@
         "fields": [
           {
             "name": "factions",
-            "type": "FactionCollection"
+            "type": "FactionCollection",
+            "description": "Collection of Spacetraders factions"
           },
           {
             "name": "agent",
-            "type": "Agent"
+            "type": "Agent",
+            "description": "Spacetraders agent"
           },
           {
             "name": "serverStatus",
-            "type": "ServerStatus"
+            "type": "ServerStatus",
+            "description": "Spacetraders server status"
           },
           {
             "name": "contracts",
-            "type": "ContractCollection"
+            "type": "ContractCollection",
+            "description": "Collection of Spacetraders contracts"
           },
           {
             "name": "ships",
-            "type": "ShipCollection"
+            "type": "ShipCollection",
+            "description": "Collection of Spacetraders ships"
           },
           {
             "name": "systems",
-            "type": "SystemCollection"
+            "type": "SystemCollection",
+            "description": "Collection of Spacetraders systems"
           },
           {
             "name": "events",
-            "type": "Json"
+            "type": "Json",
+            "description": "Spacetraders events"
           },
           {
             "name": "status",
-            "type": "String"
+            "type": "String",
+            "description": "Status of Spacetraders"
           },
           {
             "name": "parse",
@@ -87,42 +95,52 @@
                 "name": "value",
                 "type": "String"
               }
-            ]
+            ],
+            "description": "List of Spacetraders waypoints with hidden hints"
           },
           {
             "name": "intel",
-            "type": "Intel"
+            "type": "Intel",
+            "description": "Spacetraders intel"
           },
           {
             "name": "tests",
-            "type": "Tests"
+            "type": "Tests",
+            "description": "Spacetraders tests"
           }
-        ]
+        ],
+        "description": "Driver for integrating with the Spacetraders API"
       },
       {
         "name": "Faction",
         "fields": [
           {
             "name": "name",
-            "type": "String"
+            "type": "String",
+            "description": "The name of the faction."
           },
           {
             "name": "symbol",
-            "type": "String"
+            "type": "String",
+            "description": "The symbol of the faction."
           },
           {
             "name": "description",
-            "type": "String"
+            "type": "String",
+            "description": "The description of the faction."
           },
           {
             "name": "headquarters",
-            "type": "String"
+            "type": "String",
+            "description": "The headquarters of the faction."
           },
           {
             "name": "isRecruiting",
-            "type": "Boolean"
+            "type": "Boolean",
+            "description": "Indicates whether the faction is recruiting."
           }
-        ]
+        ],
+        "description": "Type representing a faction in the Spacetraders game."
       },
       {
         "name": "FactionPage",
@@ -130,14 +148,17 @@
           {
             "name": "items",
             "type": "List",
-            "ofType": "Faction"
+            "ofType": "Faction",
+            "description": "List of factions on the page."
           },
           {
             "name": "next",
             "type": "Ref",
-            "ofType": "FactionPage"
+            "ofType": "FactionPage",
+            "description": "Reference to the next faction page."
           }
-        ]
+        ],
+        "description": "Type representing a page of faction data."
       },
       {
         "name": "FactionCollection",
@@ -150,7 +171,8 @@
                 "name": "symbol",
                 "type": "String"
               }
-            ]
+            ],
+            "description": "Get details of a specific faction in the Spacetraders game"
           },
           {
             "name": "page",
@@ -166,34 +188,42 @@
                 "type": "Int",
                 "optional": true
               }
-            ]
+            ],
+            "description": "Get a page of factions in the Spacetraders game"
           }
-        ]
+        ],
+        "description": "Collection of factions in the Spacetraders game"
       },
       {
         "name": "Agent",
         "fields": [
           {
             "name": "accountId",
-            "type": "String"
+            "type": "String",
+            "description": "The unique identifier of the account associated with the agent."
           },
           {
             "name": "symbol",
-            "type": "String"
+            "type": "String",
+            "description": "The symbol representing the agent."
           },
           {
             "name": "headquarters",
-            "type": "String"
+            "type": "String",
+            "description": "The headquarters of the agent."
           },
           {
             "name": "credits",
-            "type": "Int"
+            "type": "Int",
+            "description": "The amount of credits owned by the agent."
           },
           {
             "name": "startingFaction",
-            "type": "String"
+            "type": "String",
+            "description": "The starting faction of the agent."
           }
-        ]
+        ],
+        "description": "Type representing an agent in the Spacetraders game."
       },
       {
         "name": "ServerStatus",
@@ -234,57 +264,67 @@
             "name": "links",
             "type": "Json"
           }
-        ]
+        ],
+        "description": "Type representing the server status of the Spacetraders API."
       },
       {
         "name": "Contract",
         "fields": [
           {
             "name": "id",
-            "type": "String"
+            "type": "String",
+            "description": "Unique identifier of the contract"
           },
           {
             "name": "factionSymbol",
             "type": "String",
             "hints": {
               "primary": true
-            }
+            },
+            "description": "Symbol of the faction associated with the contract"
           },
           {
             "name": "type",
             "type": "String",
             "hints": {
               "primary": true
-            }
+            },
+            "description": "Type of the contract"
           },
           {
             "name": "terms",
             "type": "Json",
             "hints": {
               "primary": true
-            }
+            },
+            "description": "Terms of the contract in JSON format"
           },
           {
             "name": "accepted",
-            "type": "Boolean"
+            "type": "Boolean",
+            "description": "Flag indicating if the contract has been accepted"
           },
           {
             "name": "fullfilled",
-            "type": "Boolean"
+            "type": "Boolean",
+            "description": "Flag indicating if the contract has been fulfilled"
           },
           {
             "name": "expiration",
-            "type": "String"
+            "type": "String",
+            "description": "Expiration date of the contract"
           },
           {
             "name": "deadlineToAccept",
-            "type": "String"
+            "type": "String",
+            "description": "Deadline for accepting the contract"
           }
         ],
         "actions": [
           {
             "name": "accept",
-            "type": "Json"
+            "type": "Json",
+            "description": "Action to accept the contract"
           },
           {
             "name": "deliver",
@@ -309,13 +349,16 @@
                 "ofType": "Ship",
                 "optional": true
               }
-            ]
+            ],
+            "description": "Action to deliver goods for the contract"
           },
           {
             "name": "fulfill",
-            "type": "Json"
+            "type": "Json",
+            "description": "Action to fulfill the contract"
           }
-        ]
+        ],
+        "description": "Type representing a contract in the Spacetraders game"
       },
       {
         "name": "ContractPage",
@@ -323,14 +366,17 @@
           {
             "name": "items",
             "type": "List",
-            "ofType": "Contract"
+            "ofType": "Contract",
+            "description": "List of contracts."
           },
           {
             "name": "next",
             "type": "Ref",
-            "ofType": "ContractPage"
+            "ofType": "ContractPage",
+            "description": "Reference to the next page of contracts."
           }
-        ]
+        ],
+        "description": "Type representing a page of contracts."
       },
       {
         "name": "ContractCollection",
@@ -343,7 +389,8 @@
                 "name": "id",
                 "type": "String"
               }
-            ]
+            ],
+            "description": "Retrieve a single contract by ID"
           },
           {
             "name": "page",
@@ -359,80 +406,98 @@
                 "type": "Int",
                 "optional": true
               }
-            ]
+            ],
+            "description": "Retrieve a page of contracts with optional pagination"
           }
-        ]
+        ],
+        "description": "Collection of contracts in the Spacetraders game"
       },
       {
         "name": "Ship",
         "fields": [
           {
             "name": "symbol",
-            "type": "String"
+            "type": "String",
+            "description": "The symbol of the ship."
           },
           {
             "name": "status",
-            "type": "String"
+            "type": "String",
+            "description": "The status of the ship."
           },
           {
             "name": "registration",
-            "type": "Json"
+            "type": "Json",
+            "description": "The registration details of the ship."
           },
           {
             "name": "nav",
-            "type": "Json"
+            "type": "Json",
+            "description": "The navigation details of the ship."
           },
           {
             "name": "crew",
-            "type": "Json"
+            "type": "Json",
+            "description": "The crew details of the ship."
           },
           {
             "name": "frame",
-            "type": "Json"
+            "type": "Json",
+            "description": "The frame details of the ship."
           },
           {
             "name": "reactor",
-            "type": "Json"
+            "type": "Json",
+            "description": "The reactor details of the ship."
           },
           {
             "name": "engine",
-            "type": "Json"
+            "type": "Json",
+            "description": "The engine details of the ship."
           },
           {
             "name": "modules",
-            "type": "Json"
+            "type": "Json",
+            "description": "The modules installed on the ship."
           },
           {
             "name": "mounts",
-            "type": "Json"
+            "type": "Json",
+            "description": "The mounts on the ship."
           },
           {
             "name": "fuel",
-            "type": "Json"
+            "type": "Json",
+            "description": "The fuel details of the ship."
           },
           {
             "name": "cargo",
-            "type": "Json"
+            "type": "Json",
+            "description": "The cargo details of the ship."
           },
           {
             "name": "system",
             "type": "Ref",
-            "ofType": "System"
+            "ofType": "System",
+            "description": "The system to which the ship belongs."
           },
           {
             "name": "waypoint",
             "type": "Ref",
-            "ofType": "Waypoint"
+            "ofType": "Waypoint",
+            "description": "The waypoint to which the ship is navigating."
           },
           {
             "name": "cooldown",
-            "type": "Int"
+            "type": "Int",
+            "description": "The cooldown time of the ship."
           }
         ],
         "actions": [
           {
             "name": "orbit",
-            "type": "Json"
+            "type": "Json",
+            "description": "Orbit the current location."
           },
           {
             "name": "extract",
@@ -443,7 +508,8 @@
                 "type": "String",
                 "optional": true
               }
-            ]
+            ],
+            "description": "Extract resources from the current location."
           },
           {
             "name": "setFlightMode",
@@ -454,7 +520,8 @@
                 "type": "String",
                 "description": "Allowed values: DRIFT STEALTH CRUISE BURN"
               }
-            ]
+            ],
+            "description": "Set the flight mode of the ship."
           },
           {
             "name": "navigate",
@@ -471,7 +538,8 @@
                 "ofType": "Waypoint",
                 "optional": true
               }
-            ]
+            ],
+            "description": "Navigate to a specific waypoint."
           },
           {
             "name": "warp",
@@ -481,7 +549,8 @@
                 "name": "waypointSymbol",
                 "type": "String"
               }
-            ]
+            ],
+            "description": "Warp to a specific waypoint."
           },
           {
             "name": "jump",
@@ -491,11 +560,13 @@
                 "name": "systemSymbol",
                 "type": "String"
               }
-            ]
+            ],
+            "description": "Jump to a specific system."
           },
           {
             "name": "survey",
-            "type": "Json"
+            "type": "Json",
+            "description": "Survey the current location."
           },
           {
             "name": "sell",
@@ -509,19 +580,23 @@
                 "name": "units",
                 "type": "Int"
               }
-            ]
+            ],
+            "description": "Sell cargo at the current location."
           },
           {
             "name": "dock",
-            "type": "Json"
+            "type": "Json",
+            "description": "Dock at the current location."
           },
           {
             "name": "negotiateContract",
-            "type": "Json"
+            "type": "Json",
+            "description": "Negotiate a contract at the current location."
           },
           {
             "name": "refuel",
-            "type": "Json"
+            "type": "Json",
+            "description": "Refuel the ship at the current location."
           },
           {
             "name": "purchase",
@@ -535,24 +610,28 @@
                 "name": "units",
                 "type": "Int"
               }
-            ]
+            ],
+            "description": "Purchase cargo at the current location."
           },
           {
             "name": "scanShips",
-            "type": "Json"
+            "type": "Json",
+            "description": "Scan for ships at the current location."
           },
           {
             "name": "scanSystems",
-            "type": "Json"
+            "type": "Json",
+            "description": "Scan for systems at the current location."
           },
           {
             "name": "scanWaypoints",
-            "type": "Json"
+            "type": "Json",
+            "description": "Scan for waypoints at the current location."
           },
           {
             "name": "refine",
             "type": "Json",
-            "description": "Attempt to refine the raw materials on your ship. The request will only succeed if your ship is capable of refining at the time of the request.",
+            "description": "Attempt to refine raw materials on the ship.",
             "params": [
               {
                 "name": "produce",
@@ -563,7 +642,8 @@
           },
           {
             "name": "chart",
-            "type": "Json"
+            "type": "Json",
+            "description": "Chart the current location."
           },
           {
             "name": "jettison",
@@ -577,7 +657,8 @@
                 "name": "units",
                 "type": "String"
               }
-            ]
+            ],
+            "description": "Jettison cargo from the ship."
           },
           {
             "name": "transferCargo",
@@ -595,7 +676,8 @@
                 "name": "shipSymbol",
                 "type": "String"
               }
-            ]
+            ],
+            "description": "Transfer cargo to another ship."
           },
           {
             "name": "installMount",
@@ -605,7 +687,8 @@
                 "name": "symbol",
                 "type": "String"
               }
-            ]
+            ],
+            "description": "Install a mount on the ship."
           },
           {
             "name": "handleArrival",
@@ -618,15 +701,18 @@
                 "name": "waypointSymbol",
                 "type": "String"
               }
-            ]
+            ],
+            "description": "Handle the arrival of the ship at a waypoint."
           }
         ],
         "events": [
           {
             "name": "arrived",
-            "type": "String"
+            "type": "String",
+            "description": "Event triggered when the ship arrives at a waypoint."
           }
-        ]
+        ],
+        "description": "Type representing a ship in the Spacetraders game."
       },
       {
         "name": "ShipPage",
@@ -634,14 +720,17 @@
           {
             "name": "items",
             "type": "List",
-            "ofType": "Ship"
+            "ofType": "Ship",
+            "description": "List of ships."
           },
           {
             "name": "next",
             "type": "Ref",
-            "ofType": "ShipPage"
+            "ofType": "ShipPage",
+            "description": "Reference to the next page of ships."
           }
-        ]
+        ],
+        "description": "Collection of ships and reference to the next page of ships."
       },
       {
         "name": "ShipCollection",
@@ -654,7 +743,8 @@
                 "name": "symbol",
                 "type": "String"
               }
-            ]
+            ],
+            "description": "Retrieve a single ship by symbol"
           },
           {
             "name": "page",
@@ -670,14 +760,15 @@
                 "type": "Int",
                 "optional": true
               }
-            ]
+            ],
+            "description": "Retrieve a page of ships"
           }
         ],
         "actions": [
           {
             "name": "purchase",
             "type": "Json",
-            "description": "Purchase a ship",
+            "description": "Purchase a ship in the Spacetraders game",
             "params": [
               {
                 "name": "shipType",
@@ -697,7 +788,8 @@
               }
             ]
           }
-        ]
+        ],
+        "description": "Collection of ships available in the Spacetraders game"
       },
       {
         "name": "System",
@@ -739,7 +831,8 @@
             "name": "factions",
             "type": "Json"
           }
-        ]
+        ],
+        "description": "Type representing a system in the Spacetraders game."
       },
       {
         "name": "SystemPage",
@@ -754,7 +847,8 @@
             "type": "Ref",
             "ofType": "SystemPage"
           }
-        ]
+        ],
+        "description": "Collection of system items with pagination support"
       },
       {
         "name": "SystemCollection",
@@ -785,67 +879,81 @@
               }
             ]
           }
-        ]
+        ],
+        "description": "Collection of systems in the Spacetraders game"
       },
       {
         "name": "Waypoint",
         "fields": [
           {
             "name": "systemSymbol",
-            "type": "String"
+            "type": "String",
+            "description": "The symbol of the system where the waypoint is located."
           },
           {
             "name": "symbol",
-            "type": "String"
+            "type": "String",
+            "description": "The symbol of the waypoint."
           },
           {
             "name": "type",
             "type": "String",
             "hints": {
               "primary": true
-            }
+            },
+            "description": "The type of the waypoint."
           },
           {
             "name": "x",
-            "type": "Int"
+            "type": "Int",
+            "description": "The x-coordinate of the waypoint."
           },
           {
             "name": "y",
-            "type": "Int"
+            "type": "Int",
+            "description": "The y-coordinate of the waypoint."
           },
           {
             "name": "orbitals",
-            "type": "Json"
+            "type": "Json",
+            "description": "The orbitals of the waypoint."
           },
           {
             "name": "traits",
             "type": "Json",
             "hints": {
               "primary": true
-            }
+            },
+            "description": "The traits of the waypoint."
           },
           {
             "name": "chart",
-            "type": "Json"
+            "type": "Json",
+            "description": "The chart of the waypoint."
           },
           {
             "name": "faction",
-            "type": "Faction"
+            "type": "Faction",
+            "description": "The faction associated with the waypoint."
           },
           {
             "name": "shipyard",
-            "type": "Shipyard"
+            "type": "Shipyard",
+            "description": "The shipyard located at the waypoint."
           },
           {
             "name": "market",
             "type": "Market",
-            "params": []
+            "params": [],
+            "description": "The market at the waypoint."
           },
           {
             "name": "jumpGate",
-            "type": "JumpGate"
+            "type": "JumpGate",
+            "description": "The jump gate at the waypoint."
           }
-        ]
+        ],
+        "description": "Type representing a waypoint in the Spacetraders game."
       },
       {
         "name": "WaypointPage",
@@ -860,7 +968,8 @@
             "type": "Ref",
             "ofType": "WaypointPage"
           }
-        ]
+        ],
+        "description": "Type representing a page of waypoints in the Spacetraders API."
       },
       {
         "name": "WaypointCollection",
@@ -891,7 +1000,8 @@
               }
             ]
           }
-        ]
+        ],
+        "description": "Collection of Waypoints in the Spacetraders program"
       },
       {
         "name": "Market",
@@ -920,45 +1030,55 @@
             "name": "tradeGoods",
             "type": "Json"
           }
-        ]
+        ],
+        "description": "Type representing a market in the SpaceTraders game."
       },
       {
         "name": "Shipyard",
         "fields": [
           {
             "name": "symbol",
-            "type": "String"
+            "type": "String",
+            "description": "The symbol of the ship"
           },
           {
             "name": "shipTypes",
-            "type": "Json"
+            "type": "Json",
+            "description": "The available ship types"
           },
           {
             "name": "transactions",
-            "type": "Json"
+            "type": "Json",
+            "description": "The transactions available at the shipyard"
           },
           {
             "name": "ships",
-            "type": "Json"
+            "type": "Json",
+            "description": "The ships available at the shipyard"
           }
-        ]
+        ],
+        "description": "Collection of shipyard items in the Spacetraders game"
       },
       {
         "name": "JumpGate",
         "fields": [
           {
             "name": "jumpRange",
-            "type": "Int"
+            "type": "Int",
+            "description": "The range of the jump gate in light years."
           },
           {
             "name": "factionSymbol",
-            "type": "String"
+            "type": "String",
+            "description": "The symbol of the faction that controls the jump gate."
           },
           {
             "name": "connectedSystems",
-            "type": "Json"
+            "type": "Json",
+            "description": "The systems connected by the jump gate."
           }
-        ]
+        ],
+        "description": "Type representing a jump gate in the Spacetraders game."
       },
       {
         "name": "Intel",
@@ -973,7 +1093,8 @@
               }
             ]
           }
-        ]
+        ],
+        "description": "Root Type for the Spacetraders driver"
       },
       {
         "name": "Tests",
@@ -1006,7 +1127,8 @@
             "name": "testGetContracts",
             "type": "Boolean"
           }
-        ]
+        ],
+        "description": "Collection of tests for the Spacetraders driver"
       }
     ]
   },
